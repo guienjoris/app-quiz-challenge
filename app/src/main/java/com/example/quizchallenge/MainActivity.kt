@@ -9,10 +9,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -53,25 +55,26 @@ fun QuizChallengeTopAppBar(modifier: Modifier = Modifier) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
-
                 ) {
                 Image(
                     modifier = Modifier.fillMaxWidth(),
-                    painter = painterResource(R.drawable.ic_launcher_foreground),
+                    painter = painterResource(R.drawable.ic_launcher),
                     contentScale = ContentScale.Fit,
                     contentDescription = null
                 )
+                Spacer(modifier=Modifier.width(10.dp))
+                Text(text="Quiz challenge")
             }
         },
 
-        modifier = modifier.height(90.dp)
+        modifier = modifier.height(100.dp)
     )
 }
 
 @SuppressLint("DiscouragedApi")
 @Composable
 fun getResIdByName(resName: String?): Int {
-    if (resName == null) return R.drawable.ic_launcher_foreground // Image par défaut si vide
+    if (resName == null) return R.drawable.ic_launcher // Image par défaut si vide
 
     val context = LocalContext.current
     // On nettoie le nom au cas où tu as écrit "R.drawable.nom" au lieu de juste "nom"
@@ -80,5 +83,5 @@ fun getResIdByName(resName: String?): Int {
     // C'est l'équivalent de faire R.drawable.$nom
     val resId = context.resources.getIdentifier(cleanName, "drawable", context.packageName)
 
-    return if (resId != 0) resId else R.drawable.ic_launcher_foreground // On gère si l'image n'existe pas
+    return if (resId != 0) resId else R.drawable.ic_launcher // On gère si l'image n'existe pas
 }

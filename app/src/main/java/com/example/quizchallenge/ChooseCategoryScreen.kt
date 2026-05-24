@@ -30,28 +30,30 @@ fun ChooseCategoryScreen(chooseCategoryViewModel: ChooseCategoryViewModel) {
     Column{
         Text(text="Bienvenue sur Quiz Challenge, sur cette application vous allez mettre votre culture générale à rude épreuve")
         Text(text = "Choisissez votre catégorie")
-    }
-
-    Box(){
-        FlowRow(modifier = Modifier
-            .fillMaxWidth()
-            .padding(5.dp),
-            maxItemsInEachRow = 2,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            categories.value.forEach{ category ->
-                CategoryCard(category)
+        Box(){
+            FlowRow(modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+                maxItemsInEachRow = 2,
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                categories.value.forEach{ category ->
+                    CategoryCard(category)
+                }
             }
         }
     }
+
+
 }
 
 @Composable
 fun CategoryCard(category: CategoryEntity){
     Card() {
         Row(horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier= Modifier.padding(5.dp)
             ) {
             Image(painter = painterResource(getResIdByName(category.pictureId)),
                 contentDescription = "Image d'illustration des catégories",
