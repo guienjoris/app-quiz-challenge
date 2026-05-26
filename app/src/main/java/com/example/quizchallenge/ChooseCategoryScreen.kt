@@ -1,6 +1,7 @@
 package com.example.quizchallenge
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,7 +25,8 @@ import com.example.quizchallenge.data.entities.CategoryEntity
 
 
 @Composable
-fun ChooseCategoryScreen(chooseCategoryViewModel: ChooseCategoryViewModel) {
+fun ChooseCategoryScreen(chooseCategoryViewModel: ChooseCategoryViewModel,
+                         onNavigateToChooseDifficulty:(Int)->Unit) {
     val categories = chooseCategoryViewModel.categoriesState.collectAsState()
 
     Column{
@@ -39,7 +41,7 @@ fun ChooseCategoryScreen(chooseCategoryViewModel: ChooseCategoryViewModel) {
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 categories.value.forEach{ category ->
-                    CategoryCard(category)
+                    CategoryCard(category,onNavigateToChooseDifficulty)
                 }
             }
         }
@@ -49,8 +51,10 @@ fun ChooseCategoryScreen(chooseCategoryViewModel: ChooseCategoryViewModel) {
 }
 
 @Composable
-fun CategoryCard(category: CategoryEntity){
-    Card() {
+fun CategoryCard(category: CategoryEntity,onNavigateToChooseDifficulty: (Int) -> Unit){
+    Card(modifier=Modifier.clickable(enabled = true,
+        onClick = { onNavigateToChooseDifficulty(category.id) }
+        )) {
         Row(horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
             modifier= Modifier.padding(5.dp)
@@ -65,3 +69,4 @@ fun CategoryCard(category: CategoryEntity){
         }
     }
 }
+
