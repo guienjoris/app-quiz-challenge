@@ -8,6 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DifficultyDao {
-    @Query("SELECT * FROM difficulty ORDER BY id DESC")
+    @Query("SELECT * FROM difficulty ORDER BY id ASC")
     fun getAllDifficulty(): Flow<List<DifficultyEntity>>
 }

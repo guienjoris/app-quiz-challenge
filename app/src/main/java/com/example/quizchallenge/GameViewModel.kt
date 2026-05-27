@@ -42,7 +42,7 @@ class GameViewModel(application: Application): AndroidViewModel(application) {
             // On collecte le Flow retourné par Room et on met à jour notre StateFlow
             quizDao.getQuizByDifficultyAndCategory(idCategory = idCategory, idDifficulty = idDifficulty)
                 .collect { list ->
-                    _gameQuizState.value = list
+                    _gameQuizState.value = list.shuffled().slice(IntRange(0,4))
                 }
         }
     }

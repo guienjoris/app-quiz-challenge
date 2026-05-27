@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
@@ -55,7 +57,7 @@ fun GameScreen(gameViewModel: GameViewModel,onBack: () -> Unit){
     }
 
 
-    Column{
+    Column(modifier=Modifier.verticalScroll(rememberScrollState())){
         IconButton(onClick = onBack) {
             Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 tint=MaterialTheme.colorScheme.tertiary,
@@ -68,8 +70,7 @@ fun GameScreen(gameViewModel: GameViewModel,onBack: () -> Unit){
                 horizontalArrangement = Arrangement.Center,
                 modifier=Modifier.fillMaxWidth()){
                 Text(text="Points: $points",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 25.sp
+                    style= MaterialTheme.typography.bodyLarge
                 )
             }
 
@@ -88,17 +89,19 @@ fun DisplayQuestion(quiz: QuizWithDifficultyAndCategory,
                     ){
 
 
-    val answers = listOf(quiz.quiz.goodAnswer) + quiz.quiz.badAnswer
-        .split("|")
+    val answers = (listOf(quiz.quiz.goodAnswer) + quiz.quiz.badAnswer
+        .split("|")).shuffled()
 
 
-    Column{
+    Column(){
         Card(modifier=Modifier.fillMaxWidth()
             .padding(5.dp)){
             Row(verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
                 modifier=Modifier.padding(15.dp)){
-                Text(text=quiz.quiz.question)
+                Text(text=quiz.quiz.question,
+                        style= MaterialTheme.typography.bodyMedium
+                )
             }
 
         }
@@ -117,7 +120,9 @@ fun DisplayQuestion(quiz: QuizWithDifficultyAndCategory,
                     Row(verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center,
                         modifier=Modifier.padding(15.dp)) {
-                        Text(text = answer)
+                        Text(text = answer,
+                            style= MaterialTheme.typography.bodySmall
+                            )
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package com.example.quizchallenge
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,7 +46,7 @@ fun ChooseDifficultyScreen(
             FlowRow(modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp),
-                maxItemsInEachRow = 2,
+                maxItemsInEachRow = 3,
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 difficulties.value.forEach { difficulty ->
@@ -58,14 +60,22 @@ fun ChooseDifficultyScreen(
 @Composable
 fun DifficultyCard(difficulty: DifficultyEntity,
                    onNavigateToGame: (idDifficulty: Int)-> Unit){
+
+    var color: Color = Color.Green
+
+    when(difficulty.difficulty){
+        "Facile" -> color = Color.Green
+        "Medium" -> color = Color.Yellow
+        "Difficile" -> color = Color.Red
+    }
+
     Card(modifier=Modifier.clickable(onClick={onNavigateToGame(difficulty.id)})){
         Row(horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
-            modifier= Modifier.padding(5.dp)){
+            modifier= Modifier.background(color=color).padding(5.dp)){
             Text(text=difficulty.difficulty,
-                lineHeight = 25.sp,
-                fontWeight = FontWeight.Bold,
-                fontSize = 21.sp
+                style= MaterialTheme.typography.bodyLarge,
+                color= Color.Black
                 )
         }
     }
