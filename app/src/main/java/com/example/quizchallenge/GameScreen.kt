@@ -169,13 +169,19 @@ fun DisplayQuestion(quiz: QuizWithDifficultyAndCategory,
                         })
                 ){
                     if(showDialog && quiz.quiz.additionalInfo != null){
-                        ShowDetailDialog(title= {Text(text="Informations",
+                        ShowDetailDialog(title= {Text(text="Bonne réponse: ",
                             style= MaterialTheme.typography.bodyLarge
                             )},
                             description= {
-                                Text(text=quiz.quiz.additionalInfo,
-                                    style= MaterialTheme.typography.bodySmall
-                                )
+                                Column() {
+                                    Text(text=quiz.quiz.goodAnswer,
+                                        style= MaterialTheme.typography.bodyLarge
+                                        )
+                                    Text(text=quiz.quiz.additionalInfo,
+                                        style= MaterialTheme.typography.bodySmall
+                                    )
+                                }
+
                             },
                             onBack = {showDialog = false},
                             onConfirm = {showDialog = false ; incrementQuestion()}
