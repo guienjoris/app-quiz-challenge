@@ -98,7 +98,8 @@ fun AppNavigation(){
             }
             
             GameScreen(gameViewModel,
-                onBack = { navController.popBackStack("${Routes.ChooseDifficulty}/${idCategory}", inclusive = false) }
+                onBack = { navController.popBackStack("${Routes.ChooseDifficulty}/${idCategory}", inclusive = false)},
+                onNavigateToHome= {navController.navigate(Routes.ChooseCategory)}
                 )
             
         }
