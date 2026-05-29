@@ -1,3 +1,4 @@
+import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -13,6 +14,7 @@ android {
     }
 
     defaultConfig {
+
         applicationId = "com.example.quizchallenge"
         minSdk = 24
         targetSdk = 36
@@ -20,6 +22,22 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val localProperties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            localPropertiesFile.inputStream().use { localProperties.load(it) }
+        }
+
+        // Rend la variable accessible dans le code Kotlin via BuildConfig
+        val serviceId = localProperties.getProperty("SERVICE_ID")
+        val userId = localProperties.getProperty("USER_ID")
+        val templateId = localProperties.getProperty("TEMPLATE_ID")
+
+        buildConfigField("String", "SERVICE_ID", "\"$serviceId\"")
+        buildConfigField("String", "USER_ID", "\"$userId\"")
+        buildConfigField("String", "TEMPLATE_ID", "\"$templateId\"")
+
     }
 
     buildTypes {
@@ -37,6 +55,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -60,6 +79,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("androidx.compose.material:material-icons-extended")
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

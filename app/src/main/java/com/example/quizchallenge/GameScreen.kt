@@ -1,17 +1,15 @@
 package com.example.quizchallenge
 
 import android.content.Context
-import android.text.TextUtils.split
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,6 +23,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
@@ -35,8 +34,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -45,14 +42,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.quizchallenge.data.entities.GameEntity
-import com.example.quizchallenge.data.entities.QuizEntity
 import com.example.quizchallenge.data.entities.QuizWithDifficultyAndCategory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -62,7 +54,6 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import kotlin.collections.flatten
 
 @Composable
 fun GameScreen(gameViewModel: GameViewModel,
@@ -289,7 +280,7 @@ fun ShowSignalmentDialog(
                 ) {
                     // Le champ de texte qui affiche l'option sélectionnée (comme le bouton du select)
                     TextField(
-                        modifier = Modifier.menuAnchor(), // Important pour positionner le menu
+                        modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, enabled=true), // Important pour positionner le menu
                         readOnly = true, // Empêche le clavier de s'ouvrir (comportement <select>)
                         value = errorType,
                         onValueChange = {},
@@ -350,17 +341,24 @@ fun envoyerMailErreurBdd(context: Context,
                          id: Int,
                          errorType:String,
                          comment:String) {
+
+    Log.d("DEBUG_MAIL", "ID envoyé : |${BuildConfig.SERVICE_ID}|")
     CoroutineScope(Dispatchers.IO).launch {
 
         val client = OkHttpClient()
         val url = "https://api.emailjs.com/api/v1.0/email/send"
 
+
+        val serviceId = BuildConfig.SERVICE_ID
+        val templateId = BuildConfig.TEMPLATE_ID
+        val userId = BuildConfig.USER_ID
+
         // Le JSON que l'on envoie à EmailJS
         val json = """
             {
-              "service_id": "service_tuzv816",
-              "template_id": "template_ybo8p8b",
-              "user_id": "Klyy8aIwc3kmGD2ql",
+              "service_id": "$serviceId",
+              "template_id": "$templateId",
+              "user_id": "$userId",
               "template_params": {
                 "id": "$id",
                 "error_type": "$errorType",
@@ -380,6 +378,7 @@ fun envoyerMailErreurBdd(context: Context,
                     }
                 } else {
                     withContext(Dispatchers.Main) {
+                        println(response)
                         Toast.makeText(context, "Erreur serveur : ${response.code}", Toast.LENGTH_SHORT).show()
                     }
                 }
