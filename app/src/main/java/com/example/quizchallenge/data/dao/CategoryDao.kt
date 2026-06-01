@@ -10,6 +10,6 @@ interface CategoryDao {
 
     @Query("SELECT * FROM category WHERE id = :id")
     fun getCategoryById(id:Int):Flow<CategoryEntity>
-    @Query("SELECT * FROM category ORDER BY id DESC")
+    @Query("SELECT * FROM category ORDER BY id ASC")
     fun getAllCategories(): Flow<List<CategoryEntity>>
 }

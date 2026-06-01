@@ -61,12 +61,12 @@ fun ChooseDifficultyScreen(
 fun DifficultyCard(difficulty: DifficultyEntity,
                    onNavigateToGame: (idDifficulty: Int)-> Unit){
 
-    var color: Color = Color.Green
+    var color: Color = MaterialTheme.colorScheme.secondary
 
     when(difficulty.difficulty){
-        "Facile" -> color = Color.Green
-        "Medium" -> color = Color.Yellow
-        "Difficile" -> color = Color.Red
+        "Facile" -> color = MaterialTheme.colorScheme.secondary
+        "Moyenne" -> color = MaterialTheme.colorScheme.tertiary
+        "Difficile" -> color = MaterialTheme.colorScheme.error
     }
 
     Card(modifier=Modifier.clickable(onClick={onNavigateToGame(difficulty.id)})){

@@ -185,12 +185,12 @@ fun DisplayQuestion(quiz: QuizWithDifficultyAndCategory,
 
                 val colorBox = if(indexClique == index){
                     if(answer == quiz.quiz.goodAnswer){
-                        Color.Green
+                        MaterialTheme.colorScheme.tertiary
                     }else {
-                        Color.Red
+                        MaterialTheme.colorScheme.error
                     }
                 }else{
-                    Color.DarkGray
+                    MaterialTheme.colorScheme.surfaceContainer
                 }
                 Box(modifier=Modifier
                     .fillMaxWidth()
