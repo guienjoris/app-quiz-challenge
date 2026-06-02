@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,7 +36,9 @@ import com.example.quizchallenge.data.entities.CategoryEntity
 
 @Composable
 fun ChooseCategoryScreen(chooseCategoryViewModel: ChooseCategoryViewModel,
-                         onNavigateToChooseDifficulty:(Int)->Unit) {
+                         onNavigateToChooseDifficulty:(Int)->Unit,
+                         onNavigateToHistoric: ()-> Unit
+                         ) {
     val categories = chooseCategoryViewModel.categoriesState.collectAsState()
 
     Column(
@@ -56,6 +59,11 @@ fun ChooseCategoryScreen(chooseCategoryViewModel: ChooseCategoryViewModel,
             text = "Choisissez votre catégorie",
             style= MaterialTheme.typography.bodyLarge,
         )
+        Button(onClick = onNavigateToHistoric) {
+            Text(text="Consulter l'historique",
+                style= MaterialTheme.typography.bodyMedium
+                )
+        }
         Box(modifier= Modifier.verticalScroll(rememberScrollState())){
             FlowRow(modifier = Modifier
                 .fillMaxWidth()

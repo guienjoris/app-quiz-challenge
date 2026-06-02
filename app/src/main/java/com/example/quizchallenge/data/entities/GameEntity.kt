@@ -25,6 +25,8 @@ data class GameEntity (
     val id: Long = 0,
     @ColumnInfo("points", defaultValue = "0")
     val points: Int = 0,
+    @ColumnInfo("number_of_questions", defaultValue = "5")
+    val numberOfQuestions: Int = 5,
     @ColumnInfo("id_category")
     val idCategory: Int,
     @ColumnInfo("id_difficulty")
@@ -32,7 +34,7 @@ data class GameEntity (
 )
 
 data class GameWithDifficultyAndCategory(
-    @Embedded val quiz: GameEntity,
+    @Embedded val game: GameEntity,
 
     @Relation(
         parentColumn = "id_category",

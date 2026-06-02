@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.quizchallenge.data.dao.CategoryDao
 import com.example.quizchallenge.data.dao.DifficultyDao
+import com.example.quizchallenge.data.dao.GameDao
 import com.example.quizchallenge.data.dao.QuizDao
 import com.example.quizchallenge.data.entities.CategoryEntity
 import com.example.quizchallenge.data.entities.DifficultyEntity
@@ -27,6 +28,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun categoryDao() : CategoryDao
     abstract fun difficultyDao(): DifficultyDao
     abstract fun quizDao(): QuizDao
+    abstract fun gameDao(): GameDao
 
 
     // Singleton pour éviter d'ouvrir plusieurs instances de la base de données en même temps

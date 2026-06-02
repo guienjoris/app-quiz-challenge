@@ -7,6 +7,8 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.core.graphics.component1
+import androidx.core.graphics.component2
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -18,6 +20,7 @@ object Routes {
     const val ChooseCategory = "choose_category"
     const val ChooseDifficulty = "choose_difficulty"
     const val GameScreen = "game_screen"
+    const val HistoricGameScreen = "historic_screen"
 }
 
 @Composable
@@ -58,13 +61,17 @@ fun AppNavigation(){
     ){
         composable(Routes.ChooseCategory){
             val chooseCategoryViewModel:ChooseCategoryViewModel = viewModel()
-            ChooseCategoryScreen(chooseCategoryViewModel, onNavigateToChooseDifficulty={idCategory:Int ->
-                navController.navigate("${Routes.ChooseDifficulty}/${idCategory}")
-            })
+            ChooseCategoryScreen(chooseCategoryViewModel,
+                onNavigateToChooseDifficulty={idCategory:Int ->
+                navController.navigate("${Routes.ChooseDifficulty}/${idCategory}",
+                    )
+                },
+                onNavigateToHistoric={navController.navigate(Routes.HistoricGameScreen)})
         }
 
         composable(route="${Routes.ChooseDifficulty}/{idCategory}",
-            arguments = listOf(navArgument("idCategory"){type = NavType.StringType})
+            arguments = listOf(navArgument("idCategory"){type = NavType.StringType},
+                )
             ){ backStackEntry ->
 
             val chooseDifficultyViewModel:ChooseDifficultyViewModel = viewModel()
@@ -75,26 +82,29 @@ fun AppNavigation(){
 
             ChooseDifficultyScreen(chooseDifficultyViewModel,
                 onBack = { navController.popBackStack(Routes.ChooseCategory, inclusive = false) },
-                onNavigateToGame = {idDifficult:Int -> navController.navigate("${Routes.GameScreen}/${idCategory}/${idDifficult}")}
+                onNavigateToGame = {idDifficulty, numberOfQuestions -> navController.navigate("${Routes.GameScreen}/${idCategory}/${idDifficulty}/${numberOfQuestions}")}
                 )
         }
         
-        composable(route="${Routes.GameScreen}/{idCategory}/{idDifficulty}",
+        composable(route="${Routes.GameScreen}/{idCategory}/{idDifficulty}/{numberOfQuestions}",
             arguments= 
                 listOf(navArgument("idCategory"){type = NavType.StringType}, 
                 navArgument("idDifficulty"){type=
-                NavType.StringType}
+                NavType.StringType},
+                    navArgument("numberOfQuestions"){type=
+                        NavType.StringType}
                 )
             ){
             backStackEntry -> 
             
             val idCategory = backStackEntry.arguments?.getString("idCategory")?.toInt() ?: 0
             val idDifficulty = backStackEntry.arguments?.getString("idDifficulty")?.toInt() ?: 0
+            val numberOfQuestions = backStackEntry.arguments?.getString("numberOfQuestions")?.toInt() ?: 5
             
             val gameViewModel: GameViewModel = viewModel()
 
             LaunchedEffect(idCategory,idDifficulty) {
-                gameViewModel.getQuizByDifficultyAndCategory(idCategory,idDifficulty)
+                gameViewModel.getQuizByDifficultyAndCategory(idCategory,idDifficulty,numberOfQuestions)
             }
             
             GameScreen(gameViewModel,
@@ -102,6 +112,17 @@ fun AppNavigation(){
                 onNavigateToHome= {navController.navigate(Routes.ChooseCategory)}
                 )
             
+        }
+
+        composable(route= Routes.HistoricGameScreen){
+
+
+            val historicViewModel: HistoricViewModel = viewModel()
+            HistoricScreen(onBack ={navController.popBackStack(
+                Routes.ChooseCategory,
+                inclusive = false)
+                                   },
+                historicViewModel)
         }
     }
 }

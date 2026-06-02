@@ -30,19 +30,21 @@ class GameViewModel(application: Application): AndroidViewModel(application) {
     private var fetchJob: Job? = null
     private var _idCategory : Int = 0
     private var _idDifficulty : Int = 0
+    private var _numberOfQuestions: Int = 5
 
-    fun getQuizByDifficultyAndCategory(idCategory: Int, idDifficulty: Int) {
+    fun getQuizByDifficultyAndCategory(idCategory: Int, idDifficulty: Int,numberOfQuestions:Int) {
         // On annule la recherche précédente si elle est encore en cours
         fetchJob?.cancel()
 
         _idCategory = idCategory
         _idDifficulty = idDifficulty
+        _numberOfQuestions= numberOfQuestions
         
         fetchJob = viewModelScope.launch {
             // On collecte le Flow retourné par Room et on met à jour notre StateFlow
             quizDao.getQuizByDifficultyAndCategory(idCategory = idCategory, idDifficulty = idDifficulty)
                 .collect { list ->
-                    _gameQuizState.value = list.shuffled().slice(IntRange(0,4))
+                    _gameQuizState.value = list.shuffled().slice(IntRange(0,_numberOfQuestions-1))
                 }
         }
     }
@@ -52,7 +54,8 @@ class GameViewModel(application: Application): AndroidViewModel(application) {
             val newGame = GameEntity(
                 points = points,
                 idCategory = _idCategory,
-                idDifficulty = _idDifficulty
+                idDifficulty = _idDifficulty,
+                numberOfQuestions = _numberOfQuestions
             )
 
             val newGameDatabase = quizDao.insertGame(newGame)
@@ -68,6 +71,7 @@ class GameViewModel(application: Application): AndroidViewModel(application) {
                     id = activeId,
                     idCategory = _idCategory,
                     idDifficulty = _idDifficulty,
+                    numberOfQuestions = _numberOfQuestions,
                     points = points
                 )
                 quizDao.updateGame(updatedGame)
