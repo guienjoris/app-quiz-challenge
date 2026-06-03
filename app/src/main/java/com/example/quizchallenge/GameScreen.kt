@@ -210,25 +210,7 @@ fun DisplayQuestion(quiz: QuizWithDifficultyAndCategory,
                             }
                         })
                 ){
-                    if(showDialog && quiz.quiz.additionalInfo != null){
-                        ShowDetailDialog(title= {Text(text="Bonne réponse: ",
-                            style= MaterialTheme.typography.bodyLarge
-                            )},
-                            description= {
-                                Column() {
-                                    Text(text=quiz.quiz.goodAnswer,
-                                        style= MaterialTheme.typography.bodyLarge
-                                        )
-                                    Text(text=quiz.quiz.additionalInfo,
-                                        style= MaterialTheme.typography.bodySmall
-                                    )
-                                }
 
-                            },
-                            onBack = {showDialog = false},
-                            onConfirm = {showDialog = false ; incrementQuestion()}
-                            )
-                    }
                     Row(verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center,
                         modifier=Modifier.padding(15.dp)) {
@@ -238,8 +220,29 @@ fun DisplayQuestion(quiz: QuizWithDifficultyAndCategory,
                     }
                 }
             }
+            if(showDialog && quiz.quiz.additionalInfo != null){
+                ShowDetailDialog(title= {Text(text="Bonne réponse: ",
+                    style= MaterialTheme.typography.bodyLarge
+                )},
+                    description= {
+                        Column() {
+                            Text(text=quiz.quiz.goodAnswer,
+                                style= MaterialTheme.typography.bodyLarge
+                            )
+                            Text(text=quiz.quiz.additionalInfo,
+                                style= MaterialTheme.typography.bodySmall
+                            )
+                        }
+
+                    },
+                    onConfirm = {showDialog = false ; incrementQuestion()}
+                )
+            }
         }
     }
+
+
+
     Column(verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier=Modifier.fillMaxSize()
@@ -260,18 +263,12 @@ fun DisplayQuestion(quiz: QuizWithDifficultyAndCategory,
 fun ShowDetailDialog(
     title: @Composable () -> Unit,
     description: @Composable () -> Unit,
-    onBack: () -> Unit,
     onConfirm: () -> Unit
 ) {
     AlertDialog(
         onDismissRequest = onConfirm,
         title = title,
         text = description,
-        dismissButton = {
-            Button(onClick = onBack) {
-                Text("Annuler")
-            }
-        },
         confirmButton = {
             Button(onClick = onConfirm) {
                 Text("Ok")
